@@ -1,42 +1,56 @@
-.container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  min-height: 100vh;
-  padding: 0 0.5rem;
-}
+/* page.module.css */
 
-.title {
-  margin-bottom: 2rem;
-  font-size: 2.5rem;
-}
+/* ...既存のスタイル... */
 
 .board {
-  display: grid;
-  grid-template-columns: repeat(9, 1fr);
-  border: 3px solid #333;
+  border: 3px solid black; /* 外枠を太くする */
 }
 
 .row {
-  display: contents;
+  display: flex;
+}
+
+/* 3行ごとに下に太線を追加 */
+.row:nth-child(3n) {
+  border-bottom: 3px solid black;
+}
+
+.row:last-child {
+  border-bottom: none;
 }
 
 .cell {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 50px;
-  height: 50px;
-  font-size: 1.5rem;
+  width: 40px;
+  height: 40px;
+  font-size: 20px;
+  text-align: center;
+
+  /* inputの矢印を非表示に */
+  appearance: textfield;
   border: 1px solid #ccc;
 }
 
-.cell:nth-child(3n) {
-  border-right: 2px solid #333;
+.cell::-webkit-outer-spin-button,
+.cell::-webkit-inner-spin-button {
+  margin: 0;
+  appearance: none;
 }
 
-.row:nth-of-type(3n) .cell {
-  border-bottom: 2px solid #333;
+/* 3列ごとに右に太線を追加 */
+.cell:nth-child(3n) {
+  border-right: 3px solid black;
+}
+
+.cell:last-child {
+  border-right: none;
+}
+
+/* 初期値を読み取り専用に見せるスタイル */
+.initial {
+  font-weight: bold;
+  color: #333;
+  background-color: #f0f0f0;
 }
