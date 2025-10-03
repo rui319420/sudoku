@@ -2,7 +2,12 @@
 
 import { useState } from 'react';
 import styles from './page.module.css';
+
 type Board = number[][];
+
+//すべての数字を!==でつなげばいけるかも
+//1~9の和は45
+//
 
 const startBoard: Board = [
   [5, 3, 0, 0, 7, 0, 0, 0, 0],
@@ -18,6 +23,30 @@ const startBoard: Board = [
 
 export default function Home() {
   const [board, setBoard] = useState<Board>(startBoard);
+  const sumBox =
+    startBoard[0][0] +
+    startBoard[0][1] +
+    startBoard[0][2] +
+    startBoard[1][0] +
+    startBoard[1][1] +
+    startBoard[1][2] +
+    startBoard[2][0] +
+    startBoard[2][1] +
+    startBoard[2][2];
+  console.log(sumBox);
+
+  let sumRow = 0;
+  const firstRow = startBoard[0];
+  for (const num of firstRow) {
+    sumRow += num;
+  }
+  console.log(sumRow);
+
+  let sumCol = 0;
+  for (const row of startBoard) {
+    sumCol += row[0];
+  }
+  console.log(sumCol);
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -30,24 +59,37 @@ export default function Home() {
       return;
     }
 
-    const newBoard = startBoard.map((row, rIndex) =>
+    // const clickHandler = (x: number, y: number) => {
+    //   const isValid = (board: number, row: number, col: number, num: number): boolean => {
+    //     if (num === 0) return true;
+    //     for (let x = 0; x < 9; x++) {
+    //       if (board[row][x] === num && x !== col) {
+    //         return false;
+    //       }
+    //     }
+    //     for (let y = 0; y < 9; y++) {
+    //       if (board[y][col] === num && y !== row) {
+    //         return false;
+    //       }
+    //     }
+    //     return true;
+    //   };
+    // };
+
+    const newBoard = board.map((row, rIndex) =>
       rIndex === rowIndex ? row.map((cell, cIndex) => (cIndex === cellIndex ? value : cell)) : row,
     );
     setBoard(newBoard);
   };
 
   return (
-    <div className={styles.container}>
-      <h1 className={styles.title}>数独</h1>
-      <div className={styles.board}>
-        {board.map(
-          (
-            row,
-            rowIndex, // ★ boardを直接使うように変更
-          ) => (
+    <div className={styles.body}>
+      <div className={styles.container}>
+        <h1 className={styles.title}>数独</h1>
+        <div className={styles.board}>
+          {board.map((row, rowIndex) => (
             <div key={rowIndex} className={styles.row}>
               {row.map((cell, cellIndex) => {
-                // ★ 初期値かどうかを判定
                 const isInitialValue = startBoard[rowIndex][cellIndex] !== 0;
 
                 return (
@@ -62,8 +104,8 @@ export default function Home() {
                 );
               })}
             </div>
-          ),
-        )}
+          ))}
+        </div>
       </div>
     </div>
   );
