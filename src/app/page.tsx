@@ -7,46 +7,64 @@ type Board = number[][];
 
 //すべての数字を!==でつなげばいけるかも
 //1~9の和は45
-//
+//厳しい条件を達成するまで新しいボードを作り続けるのが今のところの理想
+//バックトラッキングというアルゴリズムを用いて盤面を作成するのがいいらしい
 
-const startBoard: Board = [
-  [5, 3, 0, 0, 7, 0, 0, 0, 0],
-  [6, 0, 0, 1, 9, 5, 0, 0, 0],
-  [0, 9, 8, 0, 0, 0, 0, 6, 0],
-  [8, 0, 0, 0, 6, 0, 0, 0, 3],
-  [4, 0, 0, 8, 0, 3, 0, 0, 1],
-  [7, 0, 0, 0, 2, 0, 0, 0, 6],
-  [0, 6, 0, 0, 0, 0, 2, 8, 0],
-  [0, 0, 0, 4, 1, 9, 0, 0, 5],
-  [0, 0, 0, 0, 8, 0, 0, 7, 9],
-];
+const findEmpty = (board: Board): { row: number; col: number } | null => {
+  for (let y = 0; y < 9; y++) {
+    for (let x = 0; x < 9; x++) {
+      if (board[y][x] === 0) {
+        board[y][x] = Math.floor(Math.random() * 9) + 1;
+        console.log(board[y][x], 'に置き換えた！');
+        return { row: y, col: x };
+      }
+    }
+  }
+  return null;
+};
 
 export default function Home() {
-  const [board, setBoard] = useState<Board>(startBoard);
-  const sumBox =
-    startBoard[0][0] +
-    startBoard[0][1] +
-    startBoard[0][2] +
-    startBoard[1][0] +
-    startBoard[1][1] +
-    startBoard[1][2] +
-    startBoard[2][0] +
-    startBoard[2][1] +
-    startBoard[2][2];
-  console.log(sumBox);
+  const [board, setBoard] = useState([
+    [5, 3, 0, 0, 7, 0, 0, 0, 0],
+    [6, 0, 0, 1, 9, 5, 0, 0, 0],
+    [0, 9, 8, 0, 0, 0, 0, 6, 0],
+    [8, 0, 0, 0, 6, 0, 0, 0, 3],
+    [4, 0, 0, 8, 0, 3, 0, 0, 1],
+    [7, 0, 0, 0, 2, 0, 0, 0, 6],
+    [0, 6, 0, 0, 0, 0, 2, 8, 0],
+    [0, 0, 0, 4, 1, 9, 0, 0, 5],
+    [0, 0, 0, 0, 8, 0, 0, 7, 9],
+  ]);
+  const newBoard = structuredClone(board);
 
-  let sumRow = 0;
-  const firstRow = startBoard[0];
-  for (const num of firstRow) {
-    sumRow += num;
-  }
-  console.log(sumRow);
+  // const sumBox =
+  //   newBoard[0][0] +
+  //   newBoard[0][1] +
+  //   newBoard[0][2] +
+  //   newBoard[1][0] +
+  //   newBoard[1][1] +
+  //   newBoard[1][2] +
+  //   newBoard[2][0] +
+  //   newBoard[2][1] +
+  //   newBoard[2][2];
+  // console.log(sumBox);
 
-  let sumCol = 0;
-  for (const row of startBoard) {
-    sumCol += row[0];
-  }
-  console.log(sumCol);
+  // // let sumRow = 0;
+  // // const firstRow = newBoard[0];
+  // // for (const num of firstRow) {
+  // //   sumRow += num;
+  // // }
+  // // console.log(sumRow);
+
+  // // let sumCol = 0;
+  // // for (const row of newBoard) {
+  // //   sumCol += row[0];
+  // // }
+  // // console.log(sumCol);
+
+  const EmptyCell = findEmpty(board);
+
+  console.log('空きマスは', EmptyCell);
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -90,7 +108,7 @@ export default function Home() {
           {board.map((row, rowIndex) => (
             <div key={rowIndex} className={styles.row}>
               {row.map((cell, cellIndex) => {
-                const isInitialValue = startBoard[rowIndex][cellIndex] !== 0;
+                const isInitialValue = newBoard[rowIndex][cellIndex] !== 0;
 
                 return (
                   <input
