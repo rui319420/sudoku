@@ -44,6 +44,11 @@
   border-right: 3px solid black;
 }
 
+/* 盤面の一番左のセルの左線を太くする */
+.cell:first-child {
+  border-left: 3px solid black;
+}
+
 /* 3の倍数行目のセルの下線を太くする */
 .row:nth-child(3n) .cell {
   border-bottom: 3px solid black;
@@ -52,11 +57,6 @@
 /* 盤面の一番上のセルの上線を太くする */
 .row:first-child .cell {
   border-top: 3px solid black;
-}
-
-/* 盤面の一番左のセルの左線を太くする */
-.cell:first-child {
-  border-left: 3px solid black;
 }
 
 /* 初期値を読み取り専用に見せるスタイル */
