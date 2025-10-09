@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from './page.module.css';
 
 type Board = number[][];
@@ -14,8 +14,6 @@ const findEmpty = (board: Board): { row: number; col: number } | null => {
   for (let y = 0; y < 9; y++) {
     for (let x = 0; x < 9; x++) {
       if (board[y][x] === 0) {
-        board[y][x] = Math.floor(Math.random() * 9) + 1;
-        console.log(board[y][x], 'に置き換えた！');
         return { row: y, col: x };
       }
     }
@@ -62,9 +60,27 @@ export default function Home() {
   // // }
   // // console.log(sumCol);
 
-  const EmptyCell = findEmpty(board);
+  useEffect(() => {
+    const empty = findEmpty(board);
+    if (empty) {
+      const newBoard = structuredClone(board);
+      newBoard[empty.row][empty.col] = Math.floor(Math.random() * 9) + 1;
+      setBoard(newBoard);
+    }
+  }, []);
+  // UseEffectの依存配列を空にすることによってこの処理は最初の一回だけ行われる
 
-  console.log('空きマスは', EmptyCell);
+  //やること：ランダムに設置した数字が数独の条件を満たしているかどうかを判定する関数を作成すること
+  const judgeNumber = (board: Board): boolean => {
+    for (let y = 0; y < 9; y++) {
+      for (let x = 0; x < 9; x++) {
+        if (newBoard[y][x] === 0) return false;
+      }
+    }
+    return true;
+  };
+
+  console.log(judgeNumber);
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -99,6 +115,8 @@ export default function Home() {
     );
     setBoard(newBoard);
   };
+
+  console.log(newBoard);
 
   return (
     <div className={styles.body}>
